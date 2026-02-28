@@ -63,13 +63,14 @@ ml-project/
 
 ## Screenshots
 
-Add your UI and prediction screenshots here after running the app.
+### Streamlit App Home
+![Streamlit App Home](<Screenshots/Screenshot from 2026-02-28 17-32-29.png>)
 
-Example placeholders:
+### Prediction Result View
+![Prediction Result View](<Screenshots/Screenshot from 2026-02-28 17-32-47.png>)
 
-- `/home/izy/Documents/Project/TB_Classifier/Screenshots/image.png`
-- `Screenshots/Screenshot from 2026-02-28 17-32-29.png`
-- `Screenshots/Screenshot from 2026-02-28 17-32-29.png`
+### Additional Project Screenshot
+![Additional Project Screenshot](Screenshots/image.png)
 
 ## How To Run Locally
 
