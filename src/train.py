@@ -27,7 +27,7 @@ from src.config import (
 from src.preprocessing import create_datasets
 
 
-def build_model(input_shape: tuple[int, int, int] = (224, 224, 3)) -> tf.keras.Model:
+def build_model(input_shape: tuple[int, int, int] = (224, 224, 3), num_classes: int = 2) -> tf.keras.Model:
     """Build the CNN architecture from the notebook."""
     model = Sequential(
         [
@@ -41,7 +41,7 @@ def build_model(input_shape: tuple[int, int, int] = (224, 224, 3)) -> tf.keras.M
             layers.GlobalAveragePooling2D(),
             layers.Dense(128, activation="relu"),
             layers.Dropout(0.5),
-            layers.Dense(2, activation="softmax"),
+            layers.Dense(num_classes, activation="softmax"),
         ]
     )
 
@@ -55,16 +55,19 @@ def build_model(input_shape: tuple[int, int, int] = (224, 224, 3)) -> tf.keras.M
 
 def train(args: argparse.Namespace) -> dict:
     """Run full training pipeline and persist artifacts."""
-    train_ds, val_ds, test_ds = create_datasets(
+    train_ds, val_ds, test_ds, class_names = create_datasets(
         base_dir=args.data_dir,
         image_size=(args.image_height, args.image_width),
         batch_size=args.batch_size,
-        class_names=CLASS_NAMES,
+        class_names=args.class_names,
         seed=args.seed,
         validation_split=args.validation_split,
     )
 
-    model = build_model(input_shape=(args.image_height, args.image_width, 3))
+    model = build_model(
+        input_shape=(args.image_height, args.image_width, 3),
+        num_classes=len(class_names),
+    )
 
     history = model.fit(
         train_ds,
@@ -78,7 +81,7 @@ def train(args: argparse.Namespace) -> dict:
     y_pred = np.argmax(y_pred_probs, axis=1)
     y_true = np.argmax(np.concatenate([labels.numpy() for _, labels in test_ds], axis=0), axis=1)
 
-    report = classification_report(y_true, y_pred, target_names=CLASS_NAMES, digits=4)
+    report = classification_report(y_true, y_pred, target_names=class_names, digits=4)
 
     models_dir = Path(args.models_dir)
     models_dir.mkdir(parents=True, exist_ok=True)
@@ -90,7 +93,7 @@ def train(args: argparse.Namespace) -> dict:
 
     artifact = {
         "model_path": str(keras_model_path),
-        "class_names": CLASS_NAMES,
+        "class_names": class_names,
         "image_size": (args.image_height, args.image_width),
         "batch_size": args.batch_size,
         "seed": args.seed,
@@ -125,6 +128,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--seed", type=int, default=SEED)
     parser.add_argument("--validation-split", type=float, default=VALIDATION_SPLIT)
+    parser.add_argument(
+        "--class-names",
+        nargs="+",
+        default=CLASS_NAMES,
+        help="Class folder names in the data directory (e.g., Normal Tuberculosis).",
+    )
     return parser.parse_args()
 
 

@@ -19,10 +19,10 @@ def create_datasets(
     base_dir: str | Path,
     image_size: Tuple[int, int] = IMG_SIZE,
     batch_size: int = BATCH_SIZE,
-    class_names: list[str] = CLASS_NAMES,
+    class_names: list[str] | None = CLASS_NAMES,
     seed: int = SEED,
     validation_split: float = VALIDATION_SPLIT,
-) -> tuple[tf.data.Dataset, tf.data.Dataset, tf.data.Dataset]:
+) -> tuple[tf.data.Dataset, tf.data.Dataset, tf.data.Dataset, list[str]]:
     """Create train/validation/test datasets with deterministic splits.
 
     Split logic matches the original notebook:
@@ -30,6 +30,25 @@ def create_datasets(
     2. Remaining 20% split equally into validation and test
     """
     base_dir = Path(base_dir)
+    if not base_dir.exists():
+        raise FileNotFoundError(f"Data directory does not exist: {base_dir}")
+
+    subdirs = sorted([item.name for item in base_dir.iterdir() if item.is_dir()])
+    if not subdirs:
+        raise ValueError(
+            "No class subdirectories found in data directory. "
+            f"Expected folders like {CLASS_NAMES} under: {base_dir}"
+        )
+
+    if class_names is None:
+        class_names = subdirs
+    else:
+        missing = [name for name in class_names if name not in subdirs]
+        if missing:
+            raise ValueError(
+                "Configured class_names do not match dataset folders. "
+                f"Found folders={subdirs}, requested={class_names}, missing={missing}"
+            )
 
     train_ds = image_dataset_from_directory(
         base_dir,
@@ -67,6 +86,7 @@ def create_datasets(
         train_ds.prefetch(AUTOTUNE),
         val_ds.prefetch(AUTOTUNE),
         test_ds.prefetch(AUTOTUNE),
+        list(class_names),
     )
 
 

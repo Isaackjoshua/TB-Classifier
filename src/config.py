@@ -1,10 +1,19 @@
 """Central configuration for training and inference."""
+import os
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 # Paths
-DATA_DIR = PROJECT_ROOT / "data"
+KAGGLE_TB_DATA_DIR = Path(
+    "/home/izy/.cache/kagglehub/datasets/tawsifurrahman/tuberculosis-tb-chest-xray-dataset/versions/3"
+)
+DATA_DIR = Path(
+    os.getenv(
+        "TB_DATA_DIR",
+        str(KAGGLE_TB_DATA_DIR if KAGGLE_TB_DATA_DIR.exists() else PROJECT_ROOT / "data"),
+    )
+)
 MODELS_DIR = PROJECT_ROOT / "models"
 DEFAULT_MODEL_ARTIFACT = MODELS_DIR / "model.joblib"
 DEFAULT_MODEL_FILE = MODELS_DIR / "tb_cnn_classifier.keras"
