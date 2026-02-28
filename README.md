@@ -1,134 +1,99 @@
-````markdown
-# TB–HIV Co-Infection Prediction Model
+# Tuberculosis Chest X-ray Classifier
 
- Overview
-This repository contains a machine learning–based system developed to detect **Tuberculosis (TB)** and predict **HIV co-infection** using medical data. The project aims to support early diagnosis and risk assessment by leveraging data-driven models that generalize well to real-world clinical settings.
+A portfolio-ready deep learning project for binary classification of chest X-rays into:
+- `Normal`
+- `Tuberculosis`
 
-The model was trained and evaluated using multiple performance metrics to ensure **reliability**, **robustness**, and **clinical relevance**.
+The repository converts notebook experimentation into a clean, reusable training and inference pipeline with a Streamlit UI.
 
----
+## Project Overview
+This project includes:
+- modular preprocessing shared by training and inference
+- a reproducible TensorFlow training script
+- saved model artifacts for deployment
+- a Streamlit application for interactive predictions
 
- Objectives
-- Detect Tuberculosis from patient medical data  
-- Predict the likelihood of HIV co-infection among TB-positive cases  
-- Evaluate model performance using standard and clinically meaningful metrics  
-- Provide a reproducible and extensible machine learning pipeline  
+## Dataset Description
+The notebook pipeline was built for the Kaggle dataset:
+- **Tuberculosis (TB) Chest X-ray Dataset** by tawsifurrahman
+- expected folder structure under data root:
 
----
-
- Dataset
-- Medical and clinical patient data  
-- Features may include demographic, clinical, and laboratory variables  
-- Data preprocessing includes:
-  - Handling missing values
-  - Feature scaling and encoding
-  - Train–test splitting
-
- **Note:** Due to privacy and ethical considerations, raw medical data is not included in this repository.
-
----
-
-## Methodology
-1. **Data Preprocessing**
-   - Cleaning and normalization
-   - Feature selection and encoding
-
-2. **Model Training**
-   - Supervised machine learning algorithms
-   - Hyperparameter tuning and validation
-
-3. **Model Evaluation**
-   - Cross-validation
-   - Multiple performance metrics
-
----
-
-## Performance Metrics
-The model was evaluated using:
-- Accuracy
-- Precision
-- Recall (Sensitivity)
-- F1-Score
-- Confusion matrix
-- ROC-AUC
-
-These metrics were selected to ensure balanced evaluation, especially in the presence of class imbalance and medical risk sensitivity.
-
----
-
-## Technologies Used
-- Python  
-- Scikit-learn  
-- Pandas  
-- NumPy  
-- Matplotlib / Seaborn  
-
----
-
-## Repository Structure
 ```text
-.
-├── data/               # Processed or sample datasets
-├── notebooks/          # Jupyter notebooks for exploration and training
-├── src/                # Source code for preprocessing and modeling
-├── models/             # Trained model files
-├── results/            # Evaluation metrics and visualizations
-├── requirements.txt    # Project dependencies
-└── README.md           # Project documentation
-````
+data/
+├── Normal/
+└── Tuberculosis/
+```
 
----
+If your dataset is elsewhere, pass `--data-dir` to the training script.
 
-## Installation
+## Model Used
+A custom CNN implemented in TensorFlow/Keras:
+- 3 convolution blocks (`Conv2D + MaxPooling2D`)
+- `GlobalAveragePooling2D`
+- dense classifier with dropout
+- output layer with softmax for 2 classes
 
+## Project Structure
+```text
+ml-project/
+├── notebooks/
+│   └── model.ipynb
+├── data/
+├── models/
+│   └── model.joblib
+├── src/
+│   ├── config.py
+│   ├── preprocessing.py
+│   ├── train.py
+│   └── predict.py
+├── app/
+│   └── streamlit_app.py
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+## Screenshots
+Add your UI and prediction screenshots here after running the app.
+
+Example placeholders:
+- `docs/screenshots/home.png`
+- `docs/screenshots/prediction.png`
+
+## How To Run Locally
+1. Install dependencies:
 ```bash
-git clone https://github.com/your-username/tb-hiv-prediction.git
-cd tb-hiv-prediction
 pip install -r requirements.txt
 ```
 
----
+2. Prepare dataset in `data/` (or use `--data-dir` to point to your dataset root).
 
-## Usage
+3. Train model and save artifacts:
+```bash
+python -m src.train --data-dir data
+```
 
-1. Prepare the dataset and place it in the `data/` directory
-2. Run preprocessing scripts
-3. Train the model
-4. Evaluate performance metrics
+4. Run Streamlit app:
+```bash
+streamlit run app/streamlit_app.py
+```
 
-Example:
+## Example Usage
+Programmatic inference (after training):
+
+```python
+from src.predict import predict_from_image_path
+
+result = predict_from_image_path("path/to/chest_xray.png", artifact_path="models/model.joblib")
+print(result)
+```
+
+CLI training example with custom epochs:
 
 ```bash
-python src/train_model.py
+python -m src.train --data-dir data --epochs 25
 ```
 
----
-
-## Ethical Considerations
-
-* This model is intended for **research and decision-support purposes only**
-* It does **not** replace professional medical diagnosis
-* All data handling follows ethical standards for medical research
-
----
-
-## Future Work
-
-* Integration with clinical decision support systems
-* Use of deep learning models
-* Expansion to larger, multi-center datasets
-* Deployment as a web-based or mobile application
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-## Author: Isaack Joshua
-
-Developed as part of a machine learning research project on TB–HIV co-infection prediction.
-
-```
+## Notes
+- This project is for educational/research use.
+- It is not a medical diagnostic tool.

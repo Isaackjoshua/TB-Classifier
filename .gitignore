@@ -1,1 +1,19 @@
-.venv
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.h5
+*.keras
+
+# Model/data artifacts
+models/*.joblib
+models/*.pkl
+models/*.keras
+data/*
+!data/.gitkeep
+
+# Streamlit
+.streamlit/
+
+# Jupyter
+.ipynb_checkpoints/
