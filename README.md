@@ -67,7 +67,7 @@ Add your UI and prediction screenshots here after running the app.
 
 Example placeholders:
 
-- `Screenshots/image.png`
+- `/home/izy/Documents/Project/TB_Classifier/Screenshots/image.png`
 - `Screenshots/Screenshot from 2026-02-28 17-32-29.png`
 - `Screenshots/Screenshot from 2026-02-28 17-32-29.png`
 
