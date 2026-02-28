@@ -1,20 +1,25 @@
 # Tuberculosis Chest X-ray Classifier
 
 A portfolio-ready deep learning project for binary classification of chest X-rays into:
+
 - `Normal`
 - `Tuberculosis`
 
 The repository converts notebook experimentation into a clean, reusable training and inference pipeline with a Streamlit UI.
 
 ## Project Overview
+
 This project includes:
+
 - modular preprocessing shared by training and inference
 - a reproducible TensorFlow training script
 - saved model artifacts for deployment
 - a Streamlit application for interactive predictions
 
 ## Dataset Description
+
 The notebook pipeline was built for the Kaggle dataset:
+
 - **Tuberculosis (TB) Chest X-ray Dataset** by tawsifurrahman
 - expected folder structure under data root:
 
@@ -27,13 +32,16 @@ data/
 If your dataset is elsewhere, pass `--data-dir` to the training script.
 
 ## Model Used
+
 A custom CNN implemented in TensorFlow/Keras:
+
 - 3 convolution blocks (`Conv2D + MaxPooling2D`)
 - `GlobalAveragePooling2D`
 - dense classifier with dropout
 - output layer with softmax for 2 classes
 
 ## Project Structure
+
 ```text
 ml-project/
 ├── notebooks/
@@ -54,14 +62,19 @@ ml-project/
 ```
 
 ## Screenshots
+
 Add your UI and prediction screenshots here after running the app.
 
 Example placeholders:
-- `docs/screenshots/home.png`
-- `docs/screenshots/prediction.png`
+
+- `Screenshots/image.png`
+- `Screenshots/Screenshot from 2026-02-28 17-32-29.png`
+- `Screenshots/Screenshot from 2026-02-28 17-32-29.png`
 
 ## How To Run Locally
+
 1. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -69,16 +82,19 @@ pip install -r requirements.txt
 2. Prepare dataset in `data/` (or use `--data-dir` to point to your dataset root).
 
 3. Train model and save artifacts:
+
 ```bash
 python -m src.train --data-dir data
 ```
 
 4. Run Streamlit app:
+
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
 ## Example Usage
+
 Programmatic inference (after training):
 
 ```python
@@ -95,5 +111,6 @@ python -m src.train --data-dir data --epochs 25
 ```
 
 ## Notes
+
 - This project is for educational/research use.
 - It is not a medical diagnostic tool.
