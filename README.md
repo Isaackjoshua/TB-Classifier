@@ -9,7 +9,7 @@ The repository converts notebook experimentation into a clean, reusable training
 
 ## Project Overview
 
-This project includes:
+This project includes::
 
 - modular preprocessing shared by training and inference
 - a reproducible TensorFlow training script
