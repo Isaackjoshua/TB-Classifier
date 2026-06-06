@@ -29,7 +29,7 @@ data/
 └── Tuberculosis/
 ```
 
-If your dataset is elsewhere, pass `--data-dir` to the training script.
+If your dataset is elsewhere, pass `--data-dir` into the training script.
 
 ## Model Used
 
